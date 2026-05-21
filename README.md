@@ -1,29 +1,36 @@
+
+
+---
+
+# TechPulse: Developer Ecosystem Analytics Engine
+
+**PostgreSQL • SQL • Technology Momentum • 12 Query Pipeline**
+
+A production-grade analytical workspace for quantifying why developer technologies succeed or fail. Packages twelve reusable, progressively structured SQL queries that synthesize community activity, enterprise adoption patterns, and developer sentiment into actionable technology health metrics.
+
+![PostgreSQL](https://img.shields.io/badge/DATABASE-PostgreSQL-00FF00?style=for-the-badge&logo=postgresql&logoColor=white&labelColor=0D1117&color=00FF00)
+![Queries](https://img.shields.io/badge/QUERIES-12_REUSABLE-00FF00?style=for-the-badge&logo=sql&logoColor=white&labelColor=0D1117&color=00FF00)
+![Status](https://img.shields.io/badge/STATUS-ANALYTICS_READY-00FF00?style=for-the-badge&logo=github&logoColor=white&labelColor=0D1117&color=00FF00)
+
+---
+
+## Interactive Demonstration
+
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=26&pause=800&color=00FF00&center=true&vCenter=true&width=1400&lines=⟫_POSTGRES_ANALYTICS_ENGINE_⟪;>>>_LOADING_SCHEMA_[██████████]_100%25;>>>_12_QUERIES_LOADED_::_BASIC_→_ADVANCED;>>>_COMPOSITE_HEALTH_SCORES_READY;>>>_TYPE_PSQL_$DATABASE_URL_..._TO_BEGIN&background=0D1117" alt="Neon Green Postgres Banner" />
+  <img src="assets/tech_risk_demo.gif" alt="Technology risk assessment query execution" width="90%">
 </p>
 
-<br>
+*Live execution of the technology risk assessment query against the StackExchange-derived database.*
 
-<p align="center">
-  <!-- Glowing Green Badges -->
-  <img src="https://img.shields.io/badge/DATABASE-PostgreSQL-00FF00?style=for-the-badge&logo=postgresql&logoColor=white&labelColor=0D1117&color=00FF00&link=#"/>
-  <img src="https://img.shields.io/badge/QUERIES-12_REUSABLE-00FF00?style=for-the-badge&logo=sql&logoColor=white&labelColor=0D1117&color=00FF00"/>
-  <img src="https://img.shields.io/badge/STATUS-ANALYTICS_READY-00FF00?style=for-the-badge&logo=github&logoColor=white&labelColor=0D1117&color=00FF00"/>
-</p>
+---
 
-##  **`Live Demo`**
+## Strategic Objective
 
-<p align="center">
-  <img src="assets/tech_risk_demo.gif" alt="Running SQL risk analysis" width="90%">
-</p>
+Technology adoption decisions require empirical grounding, not intuition. This repository provides a structured analytical framework for evaluating developer ecosystem health. The query pipeline aggregates three discrete data dimensions—community engagement, corporate adoption, and developer sentiment—to produce objective technology momentum scores and comparative rankings.
 
-*Running the tech risk assessment query on the stockexchange database.*
+---
 
-# developer-ecosystem-analytics
-
-PostgreSQL workspace for exploring why developer technologies succeed or fail. The repo packages 12 reusable SQL queries that combine community activity, company adoption, and survey sentiment to measure technology momentum and developer experience.
-
-## Repository Layout
+## Repository Architecture
 
 ```
 developer-ecosystem-analytics/
@@ -55,43 +62,91 @@ developer-ecosystem-analytics/
     └── diagnostic_queries.sql
 ```
 
-## Data Model (summary)
+---
 
-This project assumes the following core tables (see `docs/schema_diagram.md` for details):
+## Data Model Summary
 
-- `technologies`: technology dimension with category, release year, and lifecycle flags.
-- `stack_overflow_questions` and `stack_overflow_question_tags`: community activity by tag, score, answers, and closure.
-- `developer_sentiment`: survey responses for satisfaction, adoption, and learning curve.
-- `companies`: Fortune 500–style company dimension with parent relationships.
-- `company_tech_adoption`: declared technology stacks and adoption depth by company.
-- `company_question_mentions`: questions attributed or mapped to companies.
+The analytical framework assumes a normalized relational schema comprising five core entities. Complete schema documentation available in `docs/schema_diagram.md`.
 
-## Running the queries
+| Table | Description |
+|-------|-------------|
+| `technologies` | Technology dimension with category classification, release year, and lifecycle status flags |
+| `stack_overflow_questions` | Community Q&A activity including scores, answer counts, and closure status |
+| `stack_overflow_question_tags` | Many-to-many bridge between questions and technology tags |
+| `developer_sentiment` | Survey-derived metrics for satisfaction, adoption intent, and perceived learning curve |
+| `companies` | Fortune 500–scale company dimension with parent-subsidiary relationships |
+| `company_tech_adoption` | Declared technology stacks with adoption depth indicators |
+| `company_question_mentions` | Question-to-company attribution mapping |
 
-1. Load your data into PostgreSQL following the column names described in `docs/schema_diagram.md`.
-2. Execute any query with `psql`:
-   ```bash
-   psql "$DATABASE_URL" -f queries/01_basic/query1_top_technologies.sql
-   ```
-3. Copy results into `results/` for sharing or downstream dashboards.
+---
 
-The queries are written in standard PostgreSQL (tested with 14+) and avoid vendor extensions.
+## Query Pipeline Catalog
 
-## Query Catalog
+| Tier | Query ID | Analytical Function |
+|------|----------|---------------------|
+| **Basic** | Q1 | Top trending technologies by engagement velocity |
+| | Q2 | Technology learning difficulty ranking |
+| | Q3 | Monthly adoption trend analysis |
+| **Intermediate** | Q4 | Company-level tagging volume aggregation |
+| | Q5 | Category-level technology rollups |
+| | Q6 | Hardest technology per company by adoption friction |
+| | Q7 | Growth momentum scoring (velocity + acceleration) |
+| **Advanced** | Q8 | Parent-company consolidated technology portfolio analysis |
+| | Q9 | Composite technology health scoring (multi-factor weighted) |
+| | Q10 | Question quality assessment by response rate and closure ratio |
+| | Q11 | Intraday posting pattern analysis |
+| | Q12 | Technology stack diversity metrics per company |
 
-- Basic: top trending technologies, learning difficulty, monthly adoption trends.
-- Intermediate: company tagging volume, category-level rollups, hardest tech per company, and growth momentum scores.
-- Advanced: parent-company rollups, composite health scores, question-quality assessment, intraday patterns, and stack diversity by company.
+Complete scoring methodologies and weighting logic documented inline within each SQL file and expanded in `docs/methodology.md`.
 
-Descriptions and scoring logic are documented inline in each SQL file and expanded in `docs/methodology.md`.
+---
 
-## Diagnostics
+## Execution Instructions
 
-Run `scripts/diagnostic_queries.sql` to sanity-check row counts, null density, and reference integrity before running analytics.
+| Step | Action |
+|------|--------|
+| **1** | Load source data into PostgreSQL following column specifications in `docs/schema_diagram.md` |
+| **2** | Execute individual queries via `psql` using the connection string pattern below |
+| **3** | Export results to `results/` directory for downstream dashboard integration or presentation |
 
-## Contributing
+**Execution command template:**
+```bash
+psql "$DATABASE_URL" -f queries/01_basic/query1_top_technologies.sql
+```
 
-Open an issue or PR with suggested tweaks to scoring, additional metrics, or new data sources. Keep SQL portable to PostgreSQL and update the docs when schema changes.
+**Compatibility:** Standard PostgreSQL syntax, tested against versions 14 and above. No vendor-specific extensions required.
 
-## **`Gist`**
-https://gist.github.com/Tony405-spec/82bbd137d85ada850acdffc90c192486
+---
+
+## Pre-execution Validation
+
+Run `scripts/diagnostic_queries.sql` prior to analytical execution to validate:
+
+- Row count integrity across all tables
+- Null density assessment per critical column
+- Referential integrity confirmation between foreign key relationships
+
+---
+
+## Contribution Framework
+
+| Action | Requirement |
+|--------|-------------|
+| **Proposed changes** | Open issue with documented rationale |
+| **Code contributions** | Submit PR maintaining PostgreSQL portability |
+| **Documentation updates** | Mirror existing schema documentation structure |
+| **New data sources** | Include proposed schema extension and methodology note |
+
+---
+
+## Supporting Resources
+
+| Asset | Location |
+|-------|----------|
+| **Gist summary** | [https://gist.github.com/Tony405-spec/82bbd137d85ada850acdffc90c192486](https://gist.github.com/Tony405-spec/82bbd137d85ada850acdffc90c192486) |
+| **Methodology deep-dive** | `docs/methodology.md` |
+| **Schema visualization** | `docs/schema_diagram.md` |
+| **Sample outputs** | `results/sample_outputs.csv` |
+
+---
+
