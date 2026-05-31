@@ -16,19 +16,19 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from xgboost import XGBClassifier
 
-from ml_pipeline.config import PipelineConfig, TAG_COLUMN
+from ml_pipeline.config import LABEL_COLUMN, PipelineConfig, TAG_COLUMN
 from ml_pipeline.explain import generate_shap_outputs
-from ml_pipeline.features import build_feature_matrix, derive_labels
+from ml_pipeline.features import build_labeled_feature_matrix, derive_labels
 from ml_pipeline.io import ensure_dir
 
 
 def prepare_dataset(config: PipelineConfig) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
-    features = build_feature_matrix(config.results_dir)
-    labels = derive_labels(
-        features,
-        config.label_growth_quantiles[0],
-        config.label_growth_quantiles[1],
+    features = build_labeled_feature_matrix(
+        config.results_dir,
+        config.label_growth_thresholds[0],
+        config.label_growth_thresholds[1],
     )
+    labels = features[LABEL_COLUMN]
 
     numeric_features = features.select_dtypes(include=[np.number]).copy()
     numeric_features = numeric_features.dropna(axis=1, how="all")

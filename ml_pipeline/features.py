@@ -5,7 +5,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from ml_pipeline.config import QUERY7_GROWTH_COL, QUERY9_RISK_COL, TAG_COLUMN, TEXT_COLUMNS
+from ml_pipeline.config import (
+    FEATURE_QUERY_IDS,
+    LABEL_COLUMN,
+    QUERY7_GROWTH_COL,
+    TAG_COLUMN,
+    TEXT_COLUMNS,
+)
 from ml_pipeline.io import list_query_csvs
 
 
@@ -40,9 +46,12 @@ def _load_tag_frame(csv_path: Path) -> pd.DataFrame | None:
     return df[[TAG_COLUMN] + list(rename.values())]
 
 
-def build_feature_matrix(results_dir: Path) -> pd.DataFrame:
+def build_feature_matrix(results_dir: Path, query_ids: tuple[str, ...] | None = None) -> pd.DataFrame:
+    query_ids = query_ids or FEATURE_QUERY_IDS
     tag_frames: list[pd.DataFrame] = []
     for csv_path in list_query_csvs(results_dir):
+        if query_ids and csv_path.stem not in query_ids:
+            continue
         frame = _load_tag_frame(csv_path)
         if frame is not None:
             tag_frames.append(frame)
@@ -57,19 +66,20 @@ def build_feature_matrix(results_dir: Path) -> pd.DataFrame:
     return features
 
 
-def derive_labels(features: pd.DataFrame, low_quantile: float, high_quantile: float) -> pd.Series:
+def derive_labels(features: pd.DataFrame, low_threshold: float, high_threshold: float) -> pd.Series:
     if QUERY7_GROWTH_COL not in features.columns:
         raise KeyError(f"Missing growth metric column: {QUERY7_GROWTH_COL}")
 
     growth = pd.to_numeric(features[QUERY7_GROWTH_COL], errors="coerce")
-    low_threshold = growth.quantile(low_quantile)
-    high_threshold = growth.quantile(high_quantile)
-
-    risk_status = features.get(QUERY9_RISK_COL, pd.Series(index=features.index, dtype="string"))
-    risk_status = risk_status.astype("string").fillna("")
-    high_risk = risk_status.str.contains("critical|high|medium", case=False, regex=True)
-
     labels = pd.Series("stable", index=features.index, dtype="string")
-    labels[growth >= high_threshold] = "growing"
-    labels[(growth <= low_threshold) | high_risk] = "declining"
+    labels[growth > high_threshold] = "growing"
+    labels[growth < low_threshold] = "declining"
     return labels
+
+
+def build_labeled_feature_matrix(
+    results_dir: Path, low_threshold: float, high_threshold: float
+) -> pd.DataFrame:
+    features = build_feature_matrix(results_dir)
+    labels = derive_labels(features, low_threshold, high_threshold)
+    return features.assign(**{LABEL_COLUMN: labels})

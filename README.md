@@ -11,6 +11,7 @@ A production-grade analytical workspace for quantifying why developer technologi
 ![PostgreSQL](https://img.shields.io/badge/DATABASE-PostgreSQL-00FF00?style=for-the-badge&logo=postgresql&logoColor=white&labelColor=0D1117&color=00FF00)
 ![Queries](https://img.shields.io/badge/QUERIES-12_REUSABLE-00FF00?style=for-the-badge&logo=sql&logoColor=white&labelColor=0D1117&color=00FF00)
 ![Status](https://img.shields.io/badge/STATUS-ANALYTICS_READY-00FF00?style=for-the-badge&logo=github&logoColor=white&labelColor=0D1117&color=00FF00)
+[![CI](https://github.com/skynet-datagrid-labs/TechPulse/actions/workflows/ci.yml/badge.svg)](https://github.com/skynet-datagrid-labs/TechPulse/actions/workflows/ci.yml)
 
 ---
 
