@@ -11,3 +11,13 @@ pg_service.conf
 .env.*
 .DS_Store
 *.log
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+artifacts/

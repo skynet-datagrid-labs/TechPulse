@@ -118,6 +118,20 @@ psql "$DATABASE_URL" -f queries/01_basic/query1_top_technologies.sql
 
 ---
 
+## ML Pipeline (Python)
+
+The ML pipeline consumes the CSV outputs in `results/` to build a feature matrix, train classifiers, and generate SHAP explainability artifacts.
+
+```bash
+pip install -r requirements.txt
+python -m ml_pipeline.train
+streamlit run streamlit_app.py
+```
+
+Artifacts (models, metrics, predictions, SHAP outputs) are written to `artifacts/`.
+
+---
+
 ## Pre-execution Validation
 
 Run `scripts/diagnostic_queries.sql` prior to analytical execution to validate:
@@ -149,4 +163,3 @@ Run `scripts/diagnostic_queries.sql` prior to analytical execution to validate:
 | **Sample outputs** | `results/sample_outputs.csv` |
 
 ---
-
