@@ -9,6 +9,7 @@ from ml_pipeline.config import (
     FEATURE_QUERY_IDS,
     LABEL_COLUMN,
     QUERY7_GROWTH_COL,
+    QUERY9_RISK_COL,
     TAG_COLUMN,
     TEXT_COLUMNS,
 )
@@ -74,6 +75,13 @@ def derive_labels(features: pd.DataFrame, low_threshold: float, high_threshold: 
     labels = pd.Series("stable", index=features.index, dtype="string")
     labels[growth > high_threshold] = "growing"
     labels[growth < low_threshold] = "declining"
+
+    if QUERY9_RISK_COL in features.columns:
+        risk_status = features[QUERY9_RISK_COL].astype("string")
+        risk_prefix = risk_status.str.strip().str.upper()
+        high_risk = risk_prefix.str.startswith(("CRITICAL", "HIGH"))
+        labels[high_risk.fillna(False)] = "declining"
+
     return labels
 
 
